@@ -101,32 +101,36 @@ class ScrollSnapList extends StatefulWidget {
   ///Anchor location for selected item in the list
   final SelectedItemAnchor selectedItemAnchor;
 
-  ScrollSnapList(
-      {this.background,
-      required this.itemBuilder,
-      ScrollController? listController,
-      this.curve = Curves.ease,
-      this.duration = 500,
-      this.endOfListTolerance,
-      this.focusOnItemTap = true,
-      this.focusToItem,
-      this.itemCount,
-      required this.itemSize,
-      this.key,
-      this.listViewKey,
-      this.margin,
-      required this.onItemFocus,
-      this.onReachEnd,
-      this.padding,
-      this.reverse = false,
-      this.updateOnScroll,
-      this.initialIndex,
-      this.scrollDirection = Axis.horizontal,
-      this.dynamicItemSize = false,
-      this.dynamicSizeEquation,
-      this.dynamicItemOpacity,
-      this.selectedItemAnchor = SelectedItemAnchor.MIDDLE})
-      : listController = listController ?? ScrollController(),
+  /// Scroll physics
+  final ScrollPhysics? physics;
+
+  ScrollSnapList({
+    this.background,
+    required this.itemBuilder,
+    ScrollController? controller,
+    this.curve = Curves.ease,
+    this.duration = 500,
+    this.endOfListTolerance,
+    this.focusOnItemTap = true,
+    this.focusToItem,
+    this.itemCount,
+    required this.itemSize,
+    this.key,
+    this.listViewKey,
+    this.margin,
+    required this.onItemFocus,
+    this.onReachEnd,
+    this.padding,
+    this.reverse = false,
+    this.updateOnScroll,
+    this.initialIndex,
+    this.scrollDirection = Axis.horizontal,
+    this.dynamicItemSize = false,
+    this.dynamicSizeEquation,
+    this.dynamicItemOpacity,
+    this.selectedItemAnchor = SelectedItemAnchor.MIDDLE,
+    this.physics,
+  })  : listController = controller ?? ScrollController(),
         super(key: key);
 
   @override
@@ -352,12 +356,11 @@ class ScrollSnapListState extends State<ScrollSnapList> {
               },
               child: ListView.builder(
                 key: widget.listViewKey,
+                physics: widget.physics,
                 controller: widget.listController,
                 padding: widget.scrollDirection == Axis.horizontal
                     ? EdgeInsets.symmetric(horizontal: _listPadding)
-                    : EdgeInsets.symmetric(
-                        vertical: _listPadding,
-                      ),
+                    : EdgeInsets.symmetric(vertical: _listPadding),
                 reverse: widget.reverse,
                 scrollDirection: widget.scrollDirection,
                 itemBuilder: _buildListItem,
